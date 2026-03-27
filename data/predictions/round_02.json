@@ -1,0 +1,655 @@
+{
+  "race": "China",
+  "round_id": 2,
+  "season": 2026,
+  "circuit_name": "China",
+  "model_version": "1.0",
+  "model_branch": "WET_WEATHER",
+  "generated_at": "2026-03-26T23:52:03.481746Z",
+  "weather": {
+    "rain_probability": 0.85,
+    "precipitation_mm": 0.5,
+    "route_to_wet_model": true,
+    "branch": "WET_WEATHER"
+  },
+  "predictions": [
+    {
+      "driver": "Russell",
+      "team": "Mercedes",
+      "predicted_position": 7.8,
+      "win_probability": 0.1715,
+      "top3_probability": 0.1188115788,
+      "top10_probability": 0.67868657645,
+      "dnf_probability": 0.0515,
+      "confidence_interval": {
+        "p10": 3.8,
+        "p90": 11.8
+      },
+      "dark_horse": false,
+      "wet_specialist": true,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "Mercedes faces an energy strategy deficit at China (-64.0s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Driver Skill (DPI)",
+          "description": "Russell is an elite-tier driver (DPI 1882) \u2014 consistently extracts value above their machinery."
+        },
+        {
+          "factor": "Constructor Pace (CPM)",
+          "description": "Mercedes car holds a dominant +0.88s/lap pace advantage at China based on 2026 performance data."
+        }
+      ]
+    },
+    {
+      "driver": "Antonelli",
+      "team": "Mercedes",
+      "predicted_position": 7.9,
+      "win_probability": 0.1642,
+      "top3_probability": 0.11455258929999998,
+      "top10_probability": 0.67062200435,
+      "dnf_probability": 0.0515,
+      "confidence_interval": {
+        "p10": 3.9000000000000004,
+        "p90": 11.9
+      },
+      "dark_horse": false,
+      "wet_specialist": false,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "Mercedes faces an energy strategy deficit at China (-64.0s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Driver Skill (DPI)",
+          "description": "Antonelli is an elite-tier driver (DPI 1915) \u2014 consistently extracts value above their machinery."
+        },
+        {
+          "factor": "Constructor Pace (CPM)",
+          "description": "Mercedes car holds a dominant +0.88s/lap pace advantage at China based on 2026 performance data."
+        }
+      ]
+    },
+    {
+      "driver": "Hamilton",
+      "team": "Ferrari",
+      "predicted_position": 7.9,
+      "win_probability": 0.1607,
+      "top3_probability": 0.1121388924375,
+      "top10_probability": 0.655800443775,
+      "dnf_probability": 0.0729,
+      "confidence_interval": {
+        "p10": 3.9000000000000004,
+        "p90": 11.9
+      },
+      "dark_horse": false,
+      "wet_specialist": true,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "Ferrari faces an energy strategy deficit at China (-64.0s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Driver Skill (DPI)",
+          "description": "Hamilton is an elite-tier driver (DPI 1838) \u2014 consistently extracts value above their machinery."
+        },
+        {
+          "factor": "Constructor Pace (CPM)",
+          "description": "Ferrari car holds a dominant +0.55s/lap pace advantage at China based on 2026 performance data."
+        }
+      ]
+    },
+    {
+      "driver": "Leclerc",
+      "team": "Ferrari",
+      "predicted_position": 8.5,
+      "win_probability": 0.1265,
+      "top3_probability": 0.09162374703750001,
+      "top10_probability": 0.612237281625,
+      "dnf_probability": 0.0729,
+      "confidence_interval": {
+        "p10": 4.5,
+        "p90": 12.5
+      },
+      "dark_horse": false,
+      "wet_specialist": true,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "Ferrari faces an energy strategy deficit at China (-64.0s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Driver Skill (DPI)",
+          "description": "Leclerc is an elite-tier driver (DPI 1815) \u2014 consistently extracts value above their machinery."
+        },
+        {
+          "factor": "Constructor Pace (CPM)",
+          "description": "Ferrari car holds a dominant +0.55s/lap pace advantage at China based on 2026 performance data."
+        }
+      ]
+    },
+    {
+      "driver": "Norris",
+      "team": "McLaren",
+      "predicted_position": 9.1,
+      "win_probability": 0.0053,
+      "top3_probability": 0.004007850000000004,
+      "top10_probability": 0.03061595000000003,
+      "dnf_probability": 0.95,
+      "confidence_interval": {
+        "p10": 5.1,
+        "p90": 13.1
+      },
+      "dark_horse": false,
+      "wet_specialist": true,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "McLaren faces an energy strategy deficit at China (-64.0s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Reliability Risk (RRM)",
+          "description": "McLaren reliability is CRITICAL \u2014 57% DNF risk. Systemic power unit failures in 2026 R1+R2."
+        },
+        {
+          "factor": "Driver Skill (DPI)",
+          "description": "Norris is an elite-tier driver (DPI 1755) \u2014 consistently extracts value above their machinery."
+        }
+      ]
+    },
+    {
+      "driver": "Alonso",
+      "team": "Aston Martin",
+      "predicted_position": 9.2,
+      "win_probability": 0.0053,
+      "top3_probability": 0.003956750000000004,
+      "top10_probability": 0.030470450000000027,
+      "dnf_probability": 0.95,
+      "confidence_interval": {
+        "p10": 5.199999999999999,
+        "p90": 13.2
+      },
+      "dark_horse": false,
+      "wet_specialist": true,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "Aston Martin faces an energy strategy deficit at China (-62.9s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Reliability Risk (RRM)",
+          "description": "Aston Martin reliability is CRITICAL \u2014 62% DNF risk. Systemic power unit failures in 2026 R1+R2."
+        },
+        {
+          "factor": "Driver Skill (DPI)",
+          "description": "Alonso is an elite-tier driver (DPI 1760) \u2014 consistently extracts value above their machinery."
+        }
+      ]
+    },
+    {
+      "driver": "Bearman",
+      "team": "Haas",
+      "predicted_position": 9.5,
+      "win_probability": 0.0804,
+      "top3_probability": 0.0619770506,
+      "top10_probability": 0.5193724566,
+      "dnf_probability": 0.1029,
+      "confidence_interval": {
+        "p10": 5.5,
+        "p90": 13.5
+      },
+      "dark_horse": false,
+      "wet_specialist": false,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "Haas faces an energy strategy deficit at China (-64.0s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Driver Skill (DPI)",
+          "description": "Bearman is an elite-tier driver (DPI 1797) \u2014 consistently extracts value above their machinery."
+        },
+        {
+          "factor": "Reliability Risk (RRM)",
+          "description": "Haas has strong reliability (6% DNF risk) \u2014 4/4 race finishes."
+        }
+      ]
+    },
+    {
+      "driver": "Gasly",
+      "team": "Alpine",
+      "predicted_position": 9.6,
+      "win_probability": 0.0345,
+      "top3_probability": 0.02665814754,
+      "top10_probability": 0.22467674778000002,
+      "dnf_probability": 0.6105,
+      "confidence_interval": {
+        "p10": 5.6,
+        "p90": 13.6
+      },
+      "dark_horse": false,
+      "wet_specialist": false,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "Alpine faces an energy strategy deficit at China (-64.0s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Driver Skill (DPI)",
+          "description": "Gasly is a top-tier driver (DPI 1711)."
+        },
+        {
+          "factor": "Reliability Risk (RRM)",
+          "description": "Alpine reliability is CRITICAL \u2014 36% DNF risk. Systemic power unit failures in 2026 R1+R2."
+        }
+      ]
+    },
+    {
+      "driver": "Lawson",
+      "team": "Racing Bulls",
+      "predicted_position": 9.7,
+      "win_probability": 0.0304,
+      "top3_probability": 0.023718070449999996,
+      "top10_probability": 0.20653479839999997,
+      "dnf_probability": 0.6346,
+      "confidence_interval": {
+        "p10": 5.699999999999999,
+        "p90": 13.7
+      },
+      "dark_horse": false,
+      "wet_specialist": false,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "Racing Bulls faces an energy strategy deficit at China (-64.0s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Driver Skill (DPI)",
+          "description": "Lawson is a top-tier driver (DPI 1696)."
+        },
+        {
+          "factor": "Reliability Risk (RRM)",
+          "description": "Racing Bulls reliability is CRITICAL \u2014 37% DNF risk. Systemic power unit failures in 2026 R1+R2."
+        }
+      ]
+    },
+    {
+      "driver": "Piastri",
+      "team": "McLaren",
+      "predicted_position": 10.0,
+      "win_probability": 0.0036,
+      "top3_probability": 0.0028829000000000025,
+      "top10_probability": 0.026973300000000026,
+      "dnf_probability": 0.95,
+      "confidence_interval": {
+        "p10": 6.0,
+        "p90": 14.0
+      },
+      "dark_horse": false,
+      "wet_specialist": false,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "McLaren faces an energy strategy deficit at China (-64.0s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Reliability Risk (RRM)",
+          "description": "McLaren reliability is CRITICAL \u2014 57% DNF risk. Systemic power unit failures in 2026 R1+R2."
+        },
+        {
+          "factor": "Driver Skill (DPI)",
+          "description": "Piastri is a top-tier driver (DPI 1620)."
+        }
+      ]
+    },
+    {
+      "driver": "Sainz",
+      "team": "Williams",
+      "predicted_position": 10.3,
+      "win_probability": 0.0195,
+      "top3_probability": 0.0157941376,
+      "top10_probability": 0.157717499475,
+      "dnf_probability": 0.6946,
+      "confidence_interval": {
+        "p10": 6.300000000000001,
+        "p90": 14.3
+      },
+      "dark_horse": false,
+      "wet_specialist": false,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "Williams faces an energy strategy deficit at China (-64.0s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Reliability Risk (RRM)",
+          "description": "Williams reliability is CRITICAL \u2014 40% DNF risk. Systemic power unit failures in 2026 R1+R2."
+        },
+        {
+          "factor": "Driver Skill (DPI)",
+          "description": "Sainz is a top-tier driver (DPI 1700)."
+        }
+      ]
+    },
+    {
+      "driver": "Verstappen",
+      "team": "Red Bull",
+      "predicted_position": 10.4,
+      "win_probability": 0.0373,
+      "top3_probability": 0.030417026900000005,
+      "top10_probability": 0.31417020830000003,
+      "dnf_probability": 0.3773,
+      "confidence_interval": {
+        "p10": 6.4,
+        "p90": 14.4
+      },
+      "dark_horse": false,
+      "wet_specialist": true,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "Red Bull faces an energy strategy deficit at China (-64.0s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Reliability Risk (RRM)",
+          "description": "Red Bull carries HIGH mechanical risk (22% DNF probability)."
+        },
+        {
+          "factor": "Driver Skill (DPI)",
+          "description": "Verstappen is rated at DPI 1555 \u2014 midfield driver performance."
+        }
+      ]
+    },
+    {
+      "driver": "Hadjar",
+      "team": "Red Bull",
+      "predicted_position": 10.5,
+      "win_probability": 0.0359,
+      "top3_probability": 0.029402025900000003,
+      "top10_probability": 0.309818158,
+      "dnf_probability": 0.3773,
+      "confidence_interval": {
+        "p10": 6.5,
+        "p90": 14.5
+      },
+      "dark_horse": false,
+      "wet_specialist": false,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "Red Bull faces an energy strategy deficit at China (-64.0s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Driver Skill (DPI)",
+          "description": "Hadjar is a top-tier driver (DPI 1652)."
+        },
+        {
+          "factor": "Reliability Risk (RRM)",
+          "description": "Red Bull carries HIGH mechanical risk (22% DNF probability)."
+        }
+      ]
+    },
+    {
+      "driver": "Colapinto",
+      "team": "Alpine",
+      "predicted_position": 10.5,
+      "win_probability": 0.0225,
+      "top3_probability": 0.018433531260000004,
+      "top10_probability": 0.19396276380000002,
+      "dnf_probability": 0.6105,
+      "confidence_interval": {
+        "p10": 6.5,
+        "p90": 14.5
+      },
+      "dark_horse": false,
+      "wet_specialist": false,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "Alpine faces an energy strategy deficit at China (-64.0s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Reliability Risk (RRM)",
+          "description": "Alpine reliability is CRITICAL \u2014 36% DNF risk. Systemic power unit failures in 2026 R1+R2."
+        },
+        {
+          "factor": "Constructor Pace (CPM)",
+          "description": "Alpine has a moderate +0.30s/lap pace edge at China."
+        }
+      ]
+    },
+    {
+      "driver": "Albon",
+      "team": "Williams",
+      "predicted_position": 10.5,
+      "win_probability": 0.0177,
+      "top3_probability": 0.014513185149999996,
+      "top10_probability": 0.15235881784999997,
+      "dnf_probability": 0.6946,
+      "confidence_interval": {
+        "p10": 6.5,
+        "p90": 14.5
+      },
+      "dark_horse": false,
+      "wet_specialist": false,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "Williams faces an energy strategy deficit at China (-64.0s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Reliability Risk (RRM)",
+          "description": "Williams reliability is CRITICAL \u2014 40% DNF risk. Systemic power unit failures in 2026 R1+R2."
+        },
+        {
+          "factor": "Driver Skill (DPI)",
+          "description": "Albon is a top-tier driver (DPI 1660)."
+        }
+      ]
+    },
+    {
+      "driver": "Lindblad",
+      "team": "Racing Bulls",
+      "predicted_position": 10.6,
+      "win_probability": 0.02,
+      "top3_probability": 0.016474485999999997,
+      "top10_probability": 0.1783754141,
+      "dnf_probability": 0.6346,
+      "confidence_interval": {
+        "p10": 6.6,
+        "p90": 14.6
+      },
+      "dark_horse": false,
+      "wet_specialist": false,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "Racing Bulls faces an energy strategy deficit at China (-64.0s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Reliability Risk (RRM)",
+          "description": "Racing Bulls reliability is CRITICAL \u2014 37% DNF risk. Systemic power unit failures in 2026 R1+R2."
+        },
+        {
+          "factor": "Constructor Pace (CPM)",
+          "description": "Racing Bulls has a moderate +0.23s/lap pace edge at China."
+        }
+      ]
+    },
+    {
+      "driver": "Hulkenberg",
+      "team": "Audi",
+      "predicted_position": 10.9,
+      "win_probability": 0.0088,
+      "top3_probability": 0.0073690269999999985,
+      "top10_probability": 0.08583363012499998,
+      "dnf_probability": 0.8146,
+      "confidence_interval": {
+        "p10": 6.9,
+        "p90": 14.9
+      },
+      "dark_horse": false,
+      "wet_specialist": false,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "Audi faces an energy strategy deficit at China (-64.0s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Reliability Risk (RRM)",
+          "description": "Audi reliability is CRITICAL \u2014 48% DNF risk. Systemic power unit failures in 2026 R1+R2."
+        },
+        {
+          "factor": "Driver Skill (DPI)",
+          "description": "Hulkenberg is a top-tier driver (DPI 1640)."
+        }
+      ]
+    },
+    {
+      "driver": "Stroll",
+      "team": "Aston Martin",
+      "predicted_position": 11.2,
+      "win_probability": 0.0021,
+      "top3_probability": 0.0018093500000000017,
+      "top10_probability": 0.02224260000000002,
+      "dnf_probability": 0.95,
+      "confidence_interval": {
+        "p10": 7.199999999999999,
+        "p90": 15.2
+      },
+      "dark_horse": false,
+      "wet_specialist": false,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "Aston Martin faces an energy strategy deficit at China (-62.9s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Reliability Risk (RRM)",
+          "description": "Aston Martin reliability is CRITICAL \u2014 62% DNF risk. Systemic power unit failures in 2026 R1+R2."
+        },
+        {
+          "factor": "Circuit DNA (CDC)",
+          "description": "Aston Martin's car is poorly suited to this medium_balanced circuit (-0.15s/lap)."
+        }
+      ]
+    },
+    {
+      "driver": "Ocon",
+      "team": "Haas",
+      "predicted_position": 11.7,
+      "win_probability": 0.0291,
+      "top3_probability": 0.0256723107,
+      "top10_probability": 0.3602780513,
+      "dnf_probability": 0.1029,
+      "confidence_interval": {
+        "p10": 7.699999999999999,
+        "p90": 15.7
+      },
+      "dark_horse": false,
+      "wet_specialist": false,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "Haas faces an energy strategy deficit at China (-64.0s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Driver Skill (DPI)",
+          "description": "Ocon is rated at DPI 1389 \u2014 midfield driver performance."
+        },
+        {
+          "factor": "Reliability Risk (RRM)",
+          "description": "Haas has strong reliability (6% DNF risk) \u2014 4/4 race finishes."
+        }
+      ]
+    },
+    {
+      "driver": "Bortoleto",
+      "team": "Audi",
+      "predicted_position": 11.7,
+      "win_probability": 0.0061,
+      "top3_probability": 0.005400529874999999,
+      "top10_probability": 0.07503627787499999,
+      "dnf_probability": 0.8146,
+      "confidence_interval": {
+        "p10": 7.699999999999999,
+        "p90": 15.7
+      },
+      "dark_horse": false,
+      "wet_specialist": false,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "Audi faces an energy strategy deficit at China (-64.0s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Reliability Risk (RRM)",
+          "description": "Audi reliability is CRITICAL \u2014 48% DNF risk. Systemic power unit failures in 2026 R1+R2."
+        },
+        {
+          "factor": "Constructor Pace (CPM)",
+          "description": "Audi is structurally disadvantaged at China (-0.64s/lap vs median field)."
+        }
+      ]
+    },
+    {
+      "driver": "Bottas",
+      "team": "Cadillac",
+      "predicted_position": 11.8,
+      "win_probability": 0.011,
+      "top3_probability": 0.0098342595,
+      "top10_probability": 0.14281055099999995,
+      "dnf_probability": 0.6346,
+      "confidence_interval": {
+        "p10": 7.800000000000001,
+        "p90": 15.8
+      },
+      "dark_horse": false,
+      "wet_specialist": false,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "Cadillac faces an energy strategy deficit at China (-64.0s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Reliability Risk (RRM)",
+          "description": "Cadillac reliability is CRITICAL \u2014 37% DNF risk. Systemic power unit failures in 2026 R1+R2."
+        },
+        {
+          "factor": "Driver Skill (DPI)",
+          "description": "Bottas is rated at DPI 1435 \u2014 midfield driver performance."
+        }
+      ]
+    },
+    {
+      "driver": "Perez",
+      "team": "Cadillac",
+      "predicted_position": 12.5,
+      "win_probability": 0.0075,
+      "top3_probability": 0.007036008849999998,
+      "top10_probability": 0.12267681414999998,
+      "dnf_probability": 0.6346,
+      "confidence_interval": {
+        "p10": 8.5,
+        "p90": 16.5
+      },
+      "dark_horse": false,
+      "wet_specialist": false,
+      "explanation": [
+        {
+          "factor": "Energy Strategy (ESS)",
+          "description": "Cadillac faces an energy strategy deficit at China (-64.0s total). Battery clipping risk: 100.0%."
+        },
+        {
+          "factor": "Driver Skill (DPI)",
+          "description": "Perez is rated at DPI 1300 \u2014 midfield driver performance."
+        },
+        {
+          "factor": "Reliability Risk (RRM)",
+          "description": "Cadillac reliability is CRITICAL \u2014 37% DNF risk. Systemic power unit failures in 2026 R1+R2."
+        }
+      ]
+    }
+  ]
+}
