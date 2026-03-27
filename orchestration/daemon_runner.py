@@ -36,6 +36,9 @@ schedule.every().friday.at("07:00").do(trigger_ingestion, round_id=3, session_id
 # FP2 normally starts 06:00 UTC (09:00 EAT). We trigger at 10:30 EAT.
 schedule.every().friday.at("10:30").do(trigger_ingestion, round_id=3, session_id="FP2")
 
+# FP3 normally starts 02:30 UTC (05:30 EAT on Saturday). We trigger at 07:00 EAT.
+schedule.every().saturday.at("07:00").do(trigger_ingestion, round_id=3, session_id="FP3")
+
 if __name__ == "__main__":
     logger.info("📡 F1 APEX Ingestion Daemon Online")
     logger.info("Listening for Suzuka (Japan GP) FP1 and FP2 session closures...")

@@ -141,16 +141,16 @@ def task_fetch_fia_docs(round_id: int) -> dict:
         ]
     }
 
-@task(name="Analyze FP2 Pace")
-def task_analyze_fp2(fp2_path: str) -> dict:
+@task(name="Analyze FP Pace")
+def task_analyze_fp_pace(fp_path: str, weight: float = 2.5) -> dict:
     from data.fp_analysis import extract_long_runs
     from models.cpm import ConstructorPerformanceModel
     
-    fp2_deltas = extract_long_runs(fp2_path)
-    if fp2_deltas:
+    fp_deltas = extract_long_runs(fp_path)
+    if fp_deltas:
         cpm = ConstructorPerformanceModel()
-        cpm.update_from_free_practice(fp2_deltas)
-    return fp2_deltas
+        cpm.update_from_free_practice(fp_deltas, weight=weight)
+    return fp_deltas
 
 
 @task(name="Check Weather")
@@ -436,8 +436,10 @@ def race_weekend_flow(
     else:
         # Non-sprint weekends: ingest FP2 and FP3
         fp2_path = task_ingest_session(round_id, "FP2")
-        task_analyze_fp2(fp2_path) # Inject FP2 pace into CPM prior
-        task_ingest_session(round_id, "FP3")
+        task_analyze_fp_pace(fp2_path, weight=2.5) # Inject FP2 pace (baseline weight)
+        
+        fp3_path = task_ingest_session(round_id, "FP3")
+        task_analyze_fp_pace(fp3_path, weight=3.5) # Inject FP3 pace (higher weight as it's more representative)
 
     # Step 2 — Qualifying ingestion (after sprint Elo if sprint weekend)
     quali_path = task_ingest_session(round_id, "Q")

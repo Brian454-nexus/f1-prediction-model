@@ -82,6 +82,9 @@ python -c "from orchestration.race_weekend_dag import task_ingest_session; task_
 
 # Example: Manually ingest FP2 (and run long-pace analysis)
 python -c "from orchestration.daemon_runner import trigger_ingestion; trigger_ingestion(3, 'FP2')"
+
+# Example: Manually ingest FP3 (and run high-weight pace analysis)
+python -c "from orchestration.daemon_runner import trigger_ingestion; trigger_ingestion(3, 'FP3')"
 ```
 
 ### Option B: API Server (Interactive & Frontend Support)
@@ -111,6 +114,26 @@ python models/explainer.py
 # 5. Run the full unit/integration test suite
 pytest tests -v
 ```
+
+### Option D: AI Session Insights (Claude 4.6 Sonnet)
+To generate a professional Race Engineer's narrative summary using telemetry and live news:
+
+1. **Add your API Key**: Update `ANTHROPIC_API_KEY` in your `.env` file.
+2. **Generate Report**:
+```bash
+# Get a report for a specific team in a session
+python -m orchestration.reporter --session FP2 --scope "Mercedes"
+
+# Get a report for the Top 5 teams
+python -m orchestration.reporter --session FP3 --scope "Top 5"
+
+# Get a report specifically for the qualifying session (Top 5 teams)
+python -m orchestration.reporter --session Q --scope "Top 5"
+
+# Get a full weekend high-level summary (FP1 through Qualifying)
+python -m orchestration.reporter --summary --scope "All Teams"
+```
+*(These reports autonomously fetch live technical news using `duckduckgo_search` to provide the "Human Story" context based on your chosen scope).*
 
 ---
 

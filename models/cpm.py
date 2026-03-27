@@ -131,14 +131,14 @@ class ConstructorPerformanceModel:
             "data_quality":     team_state.get("data_quality", "uncertain"),
         }
 
-    def update_from_free_practice(self, fp2_deltas: dict[str, float]) -> None:
+    def update_from_free_practice(self, fp2_deltas: dict[str, float], weight: float = 2.5) -> None:
         """
-        Dynamically update the Bayesian posterior using real-time Suzuka FP2 long-run pace.
+        Dynamically update the Bayesian posterior using real-time Free Practice long-run pace.
         This provides localized track-specific pace prior to the Sunday GP prediction.
         """
-        logger.info("Injecting FP2 long-run pace into CPM posterior")
+        logger.info(f"Injecting FP long-run pace into CPM posterior (weight={weight})")
         if not fp2_deltas:
-            logger.warning("No FP2 data provided. Skipping CPM augment.")
+            logger.warning("No FP data provided. Skipping CPM augment.")
             return
 
         for team, median_delta in fp2_deltas.items():
@@ -146,17 +146,14 @@ class ConstructorPerformanceModel:
                 self._state[team] = self._default_team_state(team)
 
             old_mean = self._state[team]["mean_advantage"]
-            # FP2 is highly indicative but not definitive (lower weight than actual race, e.g. 2.5x vs 5.0x)
-            FP2_WEIGHT = 2.5
-
             # Since median_delta is negative for faster cars, it directly translates to our "advantage" scale
-            new_mean = (old_mean + FP2_WEIGHT * median_delta) / (1 + FP2_WEIGHT)
+            new_mean = (old_mean + weight * median_delta) / (1 + weight)
 
             self._state[team]["mean_advantage"] = round(new_mean, 4)
-            self._state[team]["data_quality"] = "fp2_augmented"
+            self._state[team]["data_quality"] = "fp_augmented"
 
         self._save_state()
-        logger.info(f"CPM mathematically augmented with FP2 data. Saved to {self.state_file}")
+        logger.info(f"CPM mathematically augmented with FP data. Saved to {self.state_file}")
 
     def update_posterior(self, race_results: dict, round_id: int) -> None:
         """
