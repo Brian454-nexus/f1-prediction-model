@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environment
+.env
+*.env
+
+# FastF1 cache
+cache/
+
+# Data — raw and processed
+data/raw/
+data/processed/
+
+# Model state checkpoints
+models/state/
+
+# IDE
+.vscode/
+.idea/
+
+# Testing
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Logs
+*.log
+
+#GCP credentials
+f1-apex-*.json
+.env
