@@ -37,3 +37,6 @@ htmlcov/
 #GCP credentials
 f1-apex-*.json
 .env
+
+# Temporary Workspace Files
+tmp/
