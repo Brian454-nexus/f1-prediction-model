@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  font-size: 62.5%;
+  overflow-x: hidden;
+}
+
+body {
+  background: #000000;
+  color: #f1f1f1;
+  font-family: inherit;
+  font-size: 1.6rem;
+  font-weight: 400;
+  letter-spacing: .4px;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+body.bg-gradient-f1a {
+  background: #000000;
+  background: linear-gradient(90deg,#161234 0%, #4d0f34 50%, #161234 100%);
+}
+
+a:hover,
+button:hover {
+  cursor: pointer;
+} 
+
+/* Helpers */
+.global-container {
+  padding-top: 10rem;
+  @media (min-width: 640px) {
+    max-width: 1024px;
+    margin: 0 auto;
+  }
+}
+
+.page-container-centered {
+  margin: 0 auto;
+  max-width: 120rem;
+  padding: 0 2.4rem;
+}
+
+/* backgrounds */
+.bg-glow { box-shadow: inset 0 0 2.4rem 0 rgba(255, 255, 255, .25), 0 0 2.4rem 0 rgba(0, 0, 0, .5); }
+.bg-glow-sm { box-shadow: inset 0 0 1rem 0 rgba(255, 255, 255, .25), 0 0 2.4rem 0 rgba(0, 0, 0, .5); }
+.bg-glow-md { box-shadow: inset 0 0 4.8rem 0 rgba(255, 255, 255, .25), 0 0 2.4rem 0 rgba(0, 0, 0, .5); }
+.bg-glow-dark { box-shadow: inset 0 0 2.4rem 0 rgba(0, 0, 0, .75); }
+
+/* Text colors */
+.gradient-text-dark {
+  background: -webkit-linear-gradient(theme('colors.neutral.700'), theme('colors.neutral.800'));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.gradient-text-medium {
+  background: -webkit-linear-gradient(theme('colors.neutral.500'), theme('colors.neutral.800'));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.gradient-text {
+  background: -webkit-linear-gradient(#ffffff, theme('colors.neutral.300'));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* overriddes for recharts */
+.recharts-text { fill: #f1f1f1; }
+.recharts-cartesian-grid line { stroke: #666666; }
+.recharts-rectangle:not(.recharts-bar-rectangle .recharts-rectangle) { fill: #1f1f1f; }
+.recharts-legend-item-text,
+.recharts-cartesian-axis-tick-value { font-size: 8px; }
