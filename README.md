@@ -85,6 +85,9 @@ python -c "from orchestration.daemon_runner import trigger_ingestion; trigger_in
 
 # Example: Manually ingest FP3 (and run high-weight pace analysis)
 python -c "from orchestration.daemon_runner import trigger_ingestion; trigger_ingestion(3, 'FP3')"
+
+# Example: Manually ingest Qualifying (full telemetry load)
+python -c "from orchestration.race_weekend_dag import task_ingest_session; task_ingest_session.fn(3, 'Q')"
 ```
 
 ### Option B: API Server (Interactive & Frontend Support)
