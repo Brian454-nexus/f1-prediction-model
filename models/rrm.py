@@ -57,7 +57,10 @@ BASELINE_DNF_PROB_2026: dict[str, float] = {
     "Cadillac":     0.10,   # New entrant settling in
     "Red Bull":     0.15,   # Verstappen R2 PU DNF; improved hardware R3-R5
     "Audi":         0.20,   # Structural limitations; Hulkenberg issues ongoing
-    "McLaren":      0.18,   # Honda PU fix deployed R3-R4; 4/6 R3-R5 finishes
+    "McLaren":      0.18,   # Honda PU fix deployed R3-R4. 4/6 car finishes in R3-R5;
+                            # underlying reliability significantly improved from R1-R2
+                            # crisis. 0.18 reflects post-fix engineering confidence
+                            # (blended observed rate + improvement signal).
     "Aston Martin": 0.28,   # 2 finishes in R3-R5; still unreliable but improving
 }
 

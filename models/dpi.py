@@ -166,7 +166,9 @@ DRIVER_CLASSIFICATIONS: dict[str, str] = {
     "Lawson":     "veteran",     # Recovered strongly in 2025 post Red Bull demotion
 }
 
-# Convenience set: drivers in their genuine first F1 season in 2026
+# Convenience set: drivers in their genuine first F1 season in 2026.
+# Used by tests and any module that needs to identify first-year drivers
+# without iterating through DRIVER_CLASSIFICATIONS directly.
 ROOKIES_2026: frozenset[str] = frozenset(
     driver for driver, cls in DRIVER_CLASSIFICATIONS.items() if cls == "rookie"
 )
