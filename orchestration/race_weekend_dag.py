@@ -172,18 +172,21 @@ def task_run_ess(circuit_name: str, total_laps: int) -> dict:
     mdp     = EnergyDeploymentMDP()
     mc      = EnergyMonteCarlo(n_simulations=MC_RUNS)
 
+    # ERS deployment efficiency updated through R5 (Jeddah).
+    # McLaren reliability fix confirmed — full ERS efficiency now available.
+    # Red Bull still lagging on ERS correlation despite mechanical upgrades.
     team_efficiencies = {
-        "Mercedes":     1.15,   # Best ERS in field
-        "Ferrari":      1.05,
-        "McLaren":      1.08,   # Strong but unreliable
-        "Red Bull":     0.90,
-        "Aston Martin": 0.85,
+        "Mercedes":     1.15,   # Best ERS deployment in field; 5/5 clean races
+        "Ferrari":      1.07,   # Improved R3-R5; better thermal management
+        "McLaren":      1.10,   # Honda PU fix delivered — ERS now fully operable
+        "Red Bull":     0.92,   # Slight improvement but still below peak
+        "Aston Martin": 0.86,   # Marginally better but fundamental issues remain
         "Alpine":       0.95,
-        "Williams":     0.92,
-        "Racing Bulls": 0.90,
+        "Williams":     0.93,   # Improved correlation after R2 hydraulics fix
+        "Racing Bulls": 0.91,
         "Haas":         0.93,
-        "Cadillac":     0.88,
-        "Audi":         0.87,
+        "Cadillac":     0.89,
+        "Audi":         0.88,
     }
 
     ess_results = {}
@@ -209,6 +212,9 @@ def task_build_driver_inputs(
     """
     Assemble sub-model outputs into the driver_inputs format required by
     MetaEnsemble and WetWeatherModel.
+
+    For Miami (Round 6), applies the break upgrade modifiers from CPM
+    to reflect team development packages brought after the 3-week break.
     """
     cpm = ConstructorPerformanceModel()
     dpi = DriverPerformanceIndex()
@@ -217,6 +223,7 @@ def task_build_driver_inputs(
     qrt = QualifyingRaceTranslator()
 
     circuit_clf = cdc.classify_circuit(circuit_name)
+    is_miami = circuit_name == "Miami"
 
     # FIA penalty lookup
     penalty_map = {
@@ -224,28 +231,29 @@ def task_build_driver_inputs(
         for p in fia_docs.get("penalties", [])
     }
 
-    # 2026 Suzuka entry list with qualifying positions
-    # IMPORTANT: This is seeded with expected Suzuka grid. Live Quali data
-    # replaces these positions when FastF1 Q data is available post-session.
+    # 2026 Miami GP entry list with expected qualifying positions.
+    # Based on season form through R5 + Miami historical trends (power-unit dominant).
+    # IMPORTANT: Live Qualifying data replaces these positions when FastF1 Q data
+    # is available post-session. These are pre-qualifying model priors only.
     entry_list = [
         {"driver": "Russell",    "team": "Mercedes",     "qualifying_pos": 1},
         {"driver": "Antonelli",  "team": "Mercedes",     "qualifying_pos": 2},
-        {"driver": "Leclerc",    "team": "Ferrari",      "qualifying_pos": 3},
-        {"driver": "Hamilton",   "team": "Ferrari",      "qualifying_pos": 4},
-        {"driver": "Norris",     "team": "McLaren",      "qualifying_pos": 5},
-        {"driver": "Piastri",    "team": "McLaren",      "qualifying_pos": 6},
+        {"driver": "Norris",     "team": "McLaren",      "qualifying_pos": 3},
+        {"driver": "Piastri",    "team": "McLaren",      "qualifying_pos": 4},
+        {"driver": "Leclerc",    "team": "Ferrari",      "qualifying_pos": 5},
+        {"driver": "Hamilton",   "team": "Ferrari",      "qualifying_pos": 6},
         {"driver": "Verstappen", "team": "Red Bull",     "qualifying_pos": 7},
         {"driver": "Hadjar",     "team": "Red Bull",     "qualifying_pos": 8},
         {"driver": "Gasly",      "team": "Alpine",       "qualifying_pos": 9},
         {"driver": "Colapinto",  "team": "Alpine",       "qualifying_pos": 10},
-        {"driver": "Lawson",     "team": "Racing Bulls",  "qualifying_pos": 11},
-        {"driver": "Lindblad",   "team": "Racing Bulls",  "qualifying_pos": 12},
-        {"driver": "Bearman",    "team": "Haas",         "qualifying_pos": 13},
-        {"driver": "Ocon",       "team": "Haas",         "qualifying_pos": 14},
-        {"driver": "Alonso",     "team": "Aston Martin", "qualifying_pos": 15},
-        {"driver": "Stroll",     "team": "Aston Martin", "qualifying_pos": 16},
-        {"driver": "Albon",      "team": "Williams",     "qualifying_pos": 17},
-        {"driver": "Sainz",      "team": "Williams",     "qualifying_pos": 18},
+        {"driver": "Bearman",    "team": "Haas",         "qualifying_pos": 11},
+        {"driver": "Ocon",       "team": "Haas",         "qualifying_pos": 12},
+        {"driver": "Lawson",     "team": "Racing Bulls",  "qualifying_pos": 13},
+        {"driver": "Lindblad",   "team": "Racing Bulls",  "qualifying_pos": 14},
+        {"driver": "Sainz",      "team": "Williams",     "qualifying_pos": 15},
+        {"driver": "Albon",      "team": "Williams",     "qualifying_pos": 16},
+        {"driver": "Alonso",     "team": "Aston Martin", "qualifying_pos": 17},
+        {"driver": "Stroll",     "team": "Aston Martin", "qualifying_pos": 18},
         {"driver": "Hulkenberg", "team": "Audi",         "qualifying_pos": 19},
         {"driver": "Bortoleto",  "team": "Audi",         "qualifying_pos": 20},
         {"driver": "Perez",      "team": "Cadillac",     "qualifying_pos": 21},
@@ -258,7 +266,9 @@ def task_build_driver_inputs(
         team    = entry["team"]
         q_pos   = entry["qualifying_pos"]
 
-        cpm_data = cpm.get_pace_advantage(team, circuit_clf.archetype_name)
+        cpm_data = cpm.get_pace_advantage(
+            team, circuit_clf.archetype_name, apply_miami_upgrade=is_miami
+        )
         dpi_data = dpi.get_driver_dpi(driver)
         rrm_data = rrm.get_dnf_probability(team, circuit_name)
         cdc_data = cdc.get_constructor_circuit_affinity(team, circuit_name)
@@ -269,7 +279,7 @@ def task_build_driver_inputs(
             grid_penalty = int(penalty_val)
         except (ValueError, TypeError):
             grid_penalty = 20 # Fallback for "Pit Lane" or "Back of Grid" strings
-            
+
         actual_grid  = min(20, int(q_pos) + grid_penalty)
 
         energy_advantage = cpm_data["mean_advantage"] * 0.3 + ess_data["expected_gain_sec"] / 60
@@ -498,18 +508,18 @@ if __name__ == "__main__":
     from rich.console import Console
     from rich.table import Table
     from rich import box
-    
-    # Example: Chinese Grand Prix 2026 — Shanghai, Round 2 (Sprint Weekend)
+
+    # Miami Grand Prix 2026 — Round 6 (post 3-week break)
     result = race_weekend_flow(
-        round_id=2,
-        circuit_name="Shanghai",
-        total_laps=56,
-        race_utc="2026-03-15T07:00:00Z",
+        round_id=6,
+        circuit_name="Miami",
+        total_laps=57,
+        race_utc="2026-05-03T19:00:00Z",
     )
-    
+
     console = Console()
     table = Table(
-        title="🏎️  [bold white]F1 APEX 2026[/bold white] — [bold cyan]Shanghai (Round 2)[/bold cyan] 🏎️",
+        title="🏎️  [bold white]F1 APEX 2026[/bold white] — [bold cyan]Miami (Round 6)[/bold cyan] 🏎️",
         box=box.DOUBLE_EDGE,
         header_style="bold magenta",
         title_style="bold white",
@@ -525,20 +535,20 @@ if __name__ == "__main__":
     for i, p in enumerate(result["predictions"]):
         pos = f"P{i+1}"
         driver_str = p['driver']
-        
+
         # Highlight winner
         if i == 0:
             driver_str = f"👑 [bold yellow]{p['driver']}[/bold yellow]"
-            
-        win = f"{p['win_probability'] * 100:.1f}%"
-        top3  = f"{p['top3_probability'] * 100:.1f}%"
-        dnf = f"{p['dnf_probability'] * 100:.1f}%"
-        
+
+        win  = f"{p['win_probability'] * 100:.1f}%"
+        top3 = f"{p['top3_probability'] * 100:.1f}%"
+        dnf  = f"{p['dnf_probability'] * 100:.1f}%"
+
         # Add a subtle background color for the podium
         style = "on #111111" if i < 3 else None
-        
+
         table.add_row(pos, driver_str, p['team'], win, top3, dnf, style=style)
-        
+
     console.print("\n")
     console.print(table)
     console.print("\n")

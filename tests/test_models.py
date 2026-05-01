@@ -137,11 +137,27 @@ def test_ess_monte_carlo_probabilities_valid():
 def test_rrm_critical_teams_high_risk():
     from models.rrm import ReliabilityRiskModel
     rrm = ReliabilityRiskModel()
-    mclaren = rrm.get_dnf_probability("McLaren", "Suzuka")
-    aston   = rrm.get_dnf_probability("Aston Martin", "Suzuka")
+    aston = rrm.get_dnf_probability("Aston Martin", "Suzuka")
 
-    assert mclaren["risk_tier"] in ("CRITICAL", "HIGH")
-    assert aston["risk_tier"] in ("CRITICAL", "HIGH")
+    # Aston Martin: still HIGH RISK through R5 despite some improvement
+    assert aston["risk_tier"] in ("CRITICAL", "HIGH"), (
+        f"Aston Martin should be CRITICAL or HIGH risk, got {aston['risk_tier']}"
+    )
+
+
+def test_rrm_mclaren_improved_reliability():
+    from models.rrm import ReliabilityRiskModel
+    rrm = ReliabilityRiskModel()
+    mclaren = rrm.get_dnf_probability("McLaren", "Miami")
+
+    # McLaren: Honda PU fix deployed R3-R4; no longer CRITICAL through R5
+    # Expected to be MEDIUM or better (not CRITICAL as in early-season)
+    assert mclaren["risk_tier"] in ("MEDIUM", "LOW", "HIGH"), (
+        f"McLaren should no longer be CRITICAL (PU fixed) — got {mclaren['risk_tier']}"
+    )
+    assert mclaren["adjusted_prob"] < 0.35, (
+        f"McLaren DNF probability should be below 0.35 (was 0.38), got {mclaren['adjusted_prob']:.2f}"
+    )
 
 
 def test_rrm_mercedes_low_risk():
@@ -249,3 +265,63 @@ def test_confidence_interval_schema():
     from api.schemas import ConfidenceInterval
     ci = ConfidenceInterval(p10=3.0, p90=11.0)
     assert ci.p10 < ci.p90
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Test: Miami GP specific features
+# ─────────────────────────────────────────────────────────────────────────────
+
+def test_cpm_miami_upgrade_modifier_positive():
+    """Teams should have non-negative upgrade modifier for Miami."""
+    from models.cpm import ConstructorPerformanceModel, MIAMI_BREAK_UPGRADES
+    cpm = ConstructorPerformanceModel()
+    for team, modifier in MIAMI_BREAK_UPGRADES.items():
+        assert modifier >= 0, f"{team} Miami upgrade modifier should be >= 0"
+
+
+def test_cpm_miami_upgrade_applied_vs_not():
+    """Miami upgrade should increase or equal the pace advantage."""
+    from models.cpm import ConstructorPerformanceModel
+    cpm = ConstructorPerformanceModel()
+    result_no_upgrade  = cpm.get_pace_advantage("Ferrari", "power_unit_dominant", apply_miami_upgrade=False)
+    result_with_upgrade = cpm.get_pace_advantage("Ferrari", "power_unit_dominant", apply_miami_upgrade=True)
+    assert result_with_upgrade["mean_advantage"] >= result_no_upgrade["mean_advantage"]
+
+
+def test_rrm_updated_baselines_reflect_r5():
+    """Verify RRM baselines have been updated — McLaren should be < 0.25."""
+    from models.rrm import BASELINE_DNF_PROB_2026
+    assert BASELINE_DNF_PROB_2026["McLaren"] < 0.25, (
+        "McLaren DNF probability should be below 0.25 (PU crisis resolved by R5)"
+    )
+    assert BASELINE_DNF_PROB_2026["Aston Martin"] < 0.35, (
+        "Aston Martin DNF probability should be below 0.35 (improving through R5)"
+    )
+
+
+def test_calibration_weight_gate_no_early_update():
+    """Calibrator should NOT update weights when fewer than MIN_RACES races are logged."""
+    from models.calibration import AutoCalibrator, MIN_RACES_FOR_WEIGHT_UPDATE
+    cal = AutoCalibrator()
+    original_weights = cal.ensemble.weights.copy()
+    adjusted = cal._adjust_weights(spearman=0.40, n_races=MIN_RACES_FOR_WEIGHT_UPDATE - 1)
+    assert adjusted == original_weights, (
+        "Weights should be unchanged when below minimum race threshold"
+    )
+
+
+def test_calibration_regularization_prevents_weight_collapse():
+    """After many low-accuracy updates, no single weight should dominate."""
+    from models.calibration import AutoCalibrator, MAX_WEIGHT
+    cal = AutoCalibrator()
+    weights = cal.ensemble.weights.copy()
+    # Simulate 10 low-accuracy races
+    for _ in range(10):
+        weights_dict = type("W", (), {"weights": weights})()
+        cal.ensemble.weights = weights
+        weights = cal._adjust_weights(spearman=0.30, n_races=5)
+    # No single weight should exceed MAX_WEIGHT
+    for k, v in weights.items():
+        assert v <= MAX_WEIGHT, f"Weight for {k} ({v:.3f}) exceeds MAX_WEIGHT ({MAX_WEIGHT})"
+    # Weights should still sum to ~1.0
+    assert abs(sum(weights.values()) - 1.0) < 0.01

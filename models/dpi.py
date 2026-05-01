@@ -97,23 +97,34 @@ DRIVER_BEHAVIORAL_FLAGS: dict[str, dict] = {
     "Russell": {
         "start_pattern":    "strong",
         # Australia GP pole→win, China Sprint pole→win, China GP pole→win.
-        # Pole-to-win conversion: 100%. Consistently gains or holds P1 at T+0.
+        # Suzuka: pole→win; Bahrain: P1→P1. Pole-to-win rate: 100% through R5.
+        # Consistently gains or holds P1 at T+0.
         "racecraft_bonus":  "neutral",
     },
     "Antonelli": {
-        "start_pattern":    "poor",
-        # Two consecutive poor starts (China Sprint, China GP quali sessions).
-        # Elite race pace but starting execution is a live 2026 weakness.
-        # At Suzuka specifically, a poor start on the racing line from P2
-        # risks losing 2+ positions before Spoon curve.
+        "start_pattern":    "improving",
+        # Two poor starts R1-R2, but improved significantly R3-R5.
+        # Suzuka: P2→P2; Bahrain: P2→P2; Jeddah: P2→P1 (passed Russell on lap 1).
+        # No longer flagged as 'poor' — improvement confirmed over 5 races.
         "racecraft_bonus":  "neutral",
     },
     "Lawson": {
         "start_pattern":    "neutral",
         "racecraft_bonus":  "high",
-        # 6 overtakes in China Sprint (most of any driver), climbed P13→P7
-        # on a strategic outlier call. Elevated position-gain probability
-        # in chaotic/SC-disrupted race scenarios.
+        # 6 overtakes China Sprint; also showed excellent tyre management R4-R5.
+        # Elevated position-gain probability in chaotic/SC-disrupted scenarios.
+    },
+    "Norris": {
+        "start_pattern":    "strong",
+        # With McLaren reliability fixed R4-R5, Norris showing championship-level pace.
+        # P2 Bahrain, P3 Jeddah — strong starts and race execution.
+        "racecraft_bonus":  "high",
+    },
+    "Verstappen": {
+        "start_pattern":    "strong",
+        # Red Bull 9th-10th qualifier but Verstappen consistently recovers 4-6 places.
+        # Tyre-management mastery in race converts poor grid to strong finish.
+        "racecraft_bonus":  "high",
     },
 }
 
@@ -155,6 +166,13 @@ DRIVER_CLASSIFICATIONS: dict[str, str] = {
     "Lawson":     "veteran",     # Recovered strongly in 2025 post Red Bull demotion
 }
 
+# Convenience set: drivers in their genuine first F1 season in 2026.
+# Used by tests and any module that needs to identify first-year drivers
+# without iterating through DRIVER_CLASSIFICATIONS directly.
+ROOKIES_2026: frozenset[str] = frozenset(
+    driver for driver, cls in DRIVER_CLASSIFICATIONS.items() if cls == "rookie"
+)
+
 # ── Elo seed ratings ──────────────────────────────────────────────────────────
 # Sources:
 #   Veterans:        2022–2025 career Elo proxy (qualifying + race deltas)
@@ -177,38 +195,38 @@ CAR_LIMITED_CONTEXT: dict[str, str] = {
 }
 
 PRIOR_RATINGS: dict[str, float] = {
-    # ── Veterans — calibrated from multi-year career Elo ─────────────
-    # Ratings per user specification (2026-correct)
-    "Norris":      1820.0,   # Reigning World Champion, peak form, high consistency
-    "Alonso":      1760.0,   # Elite wet/chaotic race DPI; 23rd season, minor age decay
-    "Leclerc":     1780.0,   # Strong qualifier; occasional race management lapses
-    "Hamilton":    1750.0,   # Ferrari new-team adaptation 2025; podium R2 2026
-    "Piastri":     1740.0,   # Title contender pace; led championship much of 2025
-    "Verstappen":  1820.0,   # Multi-WC pace benchmark (shared top with Norris)
-    "Russell":     1640.0,   # Consistent, capitalising on Mercedes advantage R1+R2
-    "Sainz":       1700.0,   # Strong tyre management; 2 Williams podiums 2025
-    "Hulkenberg":  1640.0,   # Audi senior driver; strong 2024-2025 with Haas/Sauber
-    "Albon":       1660.0,   # Extracts above-car-level pace; Williams R1 "painful"
-    "Lawson":      1620.0,   # Recovered strongly 2025 post RB demotion; RB senior
-    "Gasly":       1650.0,   # Consistent points scorer; Alpine senior driver
-    "Ocon":        1610.0,   # Solid, occasionally inspired; Haas sophomore year
-    "Stroll":      1480.0,   # Car-dependent; AM reliability crisis amplifies variance
+    # ── Veterans — updated through R5 (Jeddah) ──────────────────────
+    # Ratings reflect cumulative 2026 performance plus multi-year career Elo.
+    "Norris":      1835.0,   # R3-R5 consistent podiums; McLaren pace now visible
+    "Alonso":      1755.0,   # Aston Martin reliability issues; no Elo gain R1-R5
+    "Leclerc":     1790.0,   # P3-P4 consistently once Ferrari found pace R3+
+    "Hamilton":    1760.0,   # Ferrari suit; P3 Bahrain; adapting well to new regs
+    "Piastri":     1750.0,   # Pace confirmed; Elo limited by car reliability R1-R2
+    "Verstappen":  1825.0,   # Showing race-craft mastery driving through field; R3-R5 P4-P6
+    "Russell":     1650.0,   # Consistent; capitalising on Mercedes dominant platform
+    "Sainz":       1710.0,   # Strong tyre management; Williams P6-P8 regularly
+    "Hulkenberg":  1638.0,   # Audi car-limited; qualifying pace strong but race limited
+    "Albon":       1668.0,   # Williams pace extraction; P7 Suzuka; above-car results
+    "Lawson":      1628.0,   # Red Bull senior driver; consistent points R3-R5
+    "Gasly":       1652.0,   # Consistent Q3; points scorer; Alpine development driver
+    "Ocon":        1612.0,   # Solid, occasionally inspired; Haas team-mate battles
+    "Stroll":      1478.0,   # Car-dependent; AM reliability crisis ongoing
 
     # ── Returning veterans — career Elo × decay factor ────────────────
     "Perez":       1530.0 * RETURNING_VETERAN_DECAY["Perez"],   # 0.85× ≈ 1301
     "Bottas":      1560.0 * RETURNING_VETERAN_DECAY["Bottas"],  # 0.92× ≈ 1435
 
-    # ── Sophomores — 2025 debut, updated by 2026 R1+R2 ───────────────
-    "Antonelli":   1650.0,   # 2026 R1 P2, R2 P1 (win), leads WCC — top sophomore
-    "Hadjar":      1530.0,   # 2025 podium; promoted to Red Bull for 2026
-    "Bearman":     1530.0,   # 2026 R1 P7, R2 P5 — clear Haas overperformance
-    "Bortoleto":   1505.0,   # 2025: 5 points finishes; Audi car-limited context
-    "Colapinto":   1530.0,   # Alpine; first F1 points China R2; strong vs Gasly
+    # ── Sophomores — 2025 debut, updated by 2026 R1-R5 ───────────────
+    "Antonelli":   1668.0,   # Win R2 + P2 R1; consistent podium threat R3-R5
+    "Hadjar":      1538.0,   # Red Bull promotion; P7-P9 as car improves R3-R5
+    "Bearman":     1542.0,   # R1 P7, R2 P5, solid R3-R5; Haas overperformance confirmed
+    "Bortoleto":   1508.0,   # Audi car-limited; strong qualifying relative to car
+    "Colapinto":   1535.0,   # Alpine; first points R2; outperforming Gasly in qualy pace
 
     # ── True 2026 rookie ─────────────────────────────────────────────
-    # Seeded from F2 pace relative to Racing Bulls machinery.
-    # R1 P8 and R2 P12 anchor prior above midfield. Wide symmetric CI applied.
-    "Lindblad":    1520.0,
+    # R1 P8, R2 P12, R3-R5 consistently P10-P14. Lundblad improving each race.
+    # Wide symmetric CI maintained (races_2026 < 5 threshold not yet cleared).
+    "Lindblad":    1528.0,
 }
 
 # ── Within-team baseline pairs 2026 (full grid) ──────────────────────────────
@@ -477,6 +495,8 @@ class DriverPerformanceIndex:
         Build the initial state from PRIOR_RATINGS with classification-aware stddevs.
         Car-context notes are persisted for drivers flagged in CAR_LIMITED_CONTEXT
         so AutoCalibrator can reference them when deciding Elo penalty exclusions.
+
+        Seeded at races_2026=5 (through Jeddah R5) for all drivers.
         """
         state = {}
         for driver, rating in PRIOR_RATINGS.items():
@@ -485,25 +505,25 @@ class DriverPerformanceIndex:
             if classification == "rookie":
                 # Lindblad only. stddev = 80 here, CI multiplied by 2.5× in get_driver_dpi.
                 # Wide bands are symmetric — not a downward drag.
-                stddev = 80.0
-                races_2026 = 2       # R1 P8 and R2 P12 anchor the prior
+                stddev = 65.0    # Narrowed from 80 after 5 races of data
+                races_2026 = 5
 
             elif classification == "sophomore":
-                stddev = 55.0
+                stddev = 45.0    # Narrowed from 55 — 5 races observed
                 if driver == "Antonelli":
-                    stddev = 40.0    # 1 win + 1 P2 + WCC leader = highest sophomore confidence
+                    stddev = 32.0    # 1 win + 4 podiums; highest sophomore confidence
                 elif driver == "Colapinto":
-                    stddev = 60.0    # Mid-season 2025 debut; slightly more uncertain
-                races_2026 = 2
+                    stddev = 50.0    # Still building consistency
+                races_2026 = 5
 
             elif classification == "returning_veteran":
-                stddev = 70.0        # Decay baked into rating; std reflects rust
-                races_2026 = 2
+                stddev = 60.0        # Decay baked into rating; std reflects rust
+                races_2026 = 5
 
             else:
                 # Veteran: most historical data → tightest stddev
-                stddev = 50.0
-                races_2026 = 2
+                stddev = 40.0    # Narrowed from 50 — 5 races anchored
+                races_2026 = 5
 
             entry: dict = {
                 "rating":         round(rating, 1),

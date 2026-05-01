@@ -42,6 +42,15 @@ ACCURACY_LOG = STATE_PATH / "accuracy_log.json"
 MIN_WEIGHT   = 0.02
 MAX_WEIGHT   = 0.60
 
+# --- Anti-overfitting constants -----------------------------------------------
+# Minimum races before any weight adjustment (prevents overfitting to tiny samples)
+MIN_RACES_FOR_WEIGHT_UPDATE = 3
+# Dirichlet-like regularization strength: higher = stronger pull toward default weights
+# This prevents any single sub-model from dominating after a lucky race.
+DIRICHLET_ALPHA = 0.25
+# Maximum single-step weight change per component (stability constraint)
+MAX_WEIGHT_DELTA = 0.08
+
 
 class AutoCalibrator:
     """
@@ -90,7 +99,7 @@ class AutoCalibrator:
         logger.info(f"Spearman ρ: {spearman:.4f} (target ≥ 0.65)")
 
         # ── Step 2: Ensemble weight adjustment ──────────────────────────
-        new_weights = self._adjust_weights(spearman)
+        new_weights = self._adjust_weights(spearman, len(self._accuracy_log))
         self.ensemble.update_weights(new_weights)
 
         # ── Step 3: Sub-model updates ────────────────────────────────────
@@ -153,32 +162,71 @@ class AutoCalibrator:
         rho, _ = stats.spearmanr(actual_ranks, pred_ranks)
         return float(rho)
 
-    def _adjust_weights(self, spearman: float) -> dict:
+    def _adjust_weights(self, spearman: float, n_races: int) -> dict:
         """
-        Nudge ensemble weights based on accuracy.
-        If accuracy is very high (ρ > 0.75), keep weights stable to avoid overfit.
-        If accuracy is low (ρ < 0.50), shift weight toward more reliable sub-models.
+        Bayesian-regularized ensemble weight adjustment.
+
+        Key ML best practices applied here:
+          1. Minimum races gate: no updates before MIN_RACES_FOR_WEIGHT_UPDATE
+             to prevent overfitting to small samples.
+          2. Dirichlet regularization: each update blends with the default
+             (prior) weights by DIRICHLET_ALPHA, preventing weight collapse
+             to a single dominant sub-model.
+          3. Per-step clamp: no single component can change by more than
+             MAX_WEIGHT_DELTA per race — provides stability against outlier races.
+          4. High-accuracy stability: weights are frozen when ρ ≥ 0.75 (model
+             is performing well; no need to risk regression).
+
+        Args:
+            spearman: Spearman ρ from this race.
+            n_races:  Total races logged so far (including current).
+
+        Returns:
+            Updated weight dict that sums to 1.0.
         """
         current = self.ensemble.weights.copy()
 
-        if spearman >= 0.75:
-            logger.info("High accuracy — minimal weight adjustment")
+        # Gate: insufficient data — keep current weights unchanged
+        if n_races < MIN_RACES_FOR_WEIGHT_UPDATE:
+            logger.info(
+                f"Insufficient data ({n_races} races < {MIN_RACES_FOR_WEIGHT_UPDATE}) "
+                "— weight update skipped (anti-overfitting gate)"
+            )
             return current
 
-        # Simple heuristic: in low accuracy regimes, shift more weight to CPM and DPI
-        adjustment = max(0, 0.65 - spearman) * 0.05
+        # High accuracy: stable; no adjustment to avoid spurious drift
+        if spearman >= 0.75:
+            logger.info(f"High accuracy (ρ={spearman:.3f}) — weights held stable")
+            return current
+
+        # Accuracy-signal update: proportional to gap below 0.65 target
+        adjustment = max(0.0, 0.65 - spearman) * 0.05
         new = current.copy()
-        new["CPM"] = min(MAX_WEIGHT, new["CPM"] + adjustment)
-        new["DPI"] = min(MAX_WEIGHT, new["DPI"] + adjustment * 0.5)
-        new["ESS"] = max(MIN_WEIGHT, new["ESS"] - adjustment * 0.5)
-        new["QRT"] = max(MIN_WEIGHT, new["QRT"] - adjustment * 0.5)
+        new["CPM"] = current["CPM"] + adjustment
+        new["DPI"] = current["DPI"] + adjustment * 0.5
+        new["ESS"] = current["ESS"] - adjustment * 0.5
+        new["QRT"] = current["QRT"] - adjustment * 0.5
 
-        # Renormalise to sum to 1.0
-        total = sum(new.values())
-        new = {k: round(v / total, 4) for k, v in new.items()}
+        # Dirichlet regularization: blend toward DEFAULT_WEIGHTS prior
+        # Prevents any sub-model from dominating; maintains diversity
+        regularized = {
+            k: (1.0 - DIRICHLET_ALPHA) * new[k] + DIRICHLET_ALPHA * DEFAULT_WEIGHTS[k]
+            for k in new
+        }
 
-        logger.info(f"Weights adjusted: {new}")
-        return new
+        # Per-step stability clamp: cap maximum weight change per component
+        clamped = {}
+        for k in regularized:
+            delta = regularized[k] - current[k]
+            delta = max(-MAX_WEIGHT_DELTA, min(MAX_WEIGHT_DELTA, delta))
+            clamped[k] = min(MAX_WEIGHT, max(MIN_WEIGHT, current[k] + delta))
+
+        # Renormalise to sum exactly to 1.0
+        total = sum(clamped.values())
+        final = {k: round(v / total, 4) for k, v in clamped.items()}
+
+        logger.info(f"Weights adjusted (ρ={spearman:.3f}, α={DIRICHLET_ALPHA}): {final}")
+        return final
 
     @staticmethod
     def _compute_team_avg_positions(results: list[dict]) -> dict[str, float]:
