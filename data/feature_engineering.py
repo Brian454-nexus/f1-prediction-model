@@ -78,20 +78,24 @@ STANDINGS_2025_WCC: dict[str, float] = {
     "Sauber":       4.0,
 }
 
-# Early 2026 constructor race pace rank (lower = quicker; 1 = fastest)
-PACE_RANK_2026_EARLY: dict[str, float] = {
+# 2026 constructor race pace rank through R5 Jeddah (lower = quicker; 1 = fastest)
+# Updated from R1-R5 classified finishing performance and sector time analysis.
+PACE_RANK_2026_R5: dict[str, float] = {
     "Mercedes":     1.0,
     "Ferrari":      2.0,
-    "Haas":         3.0,
-    "Racing Bulls": 4.0,
-    "Alpine":       5.0,
-    "McLaren":      6.0,   # Pace is actually strong but DNS/DNFs mask it
-    "Williams":     7.0,
+    "McLaren":      3.0,   # Reliability fixed R3-R4; true pace now showing
+    "Haas":         4.0,   # Consistently outperforming expectations
+    "Racing Bulls": 5.0,   # Lawson extracting strong results
+    "Alpine":       6.0,   # Stable midfield; Gasly/Colapinto points scorers
+    "Williams":     7.0,   # Albon above-car extraction
     "Cadillac":     8.0,
-    "Red Bull":     9.0,
+    "Red Bull":     9.0,   # Still 9th-10th pace despite upgrades
     "Aston Martin": 10.0,
     "Audi":         11.0,
 }
+
+# Legacy alias for code that still references the old name
+PACE_RANK_2026_EARLY = PACE_RANK_2026_R5
 
 
 class FeatureEngineering:
