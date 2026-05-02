@@ -81,7 +81,7 @@ STANDINGS_2025_WCC: dict[str, float] = {
 # 2026 constructor race pace rank through R3 Japan (lower = quicker; 1 = fastest)
 # Updated from R1-R3 classified finishing performance and sector time analysis.
 # Bahrain and Saudi Arabia cancelled — season reduced to 22 races, 3 completed.
-PACE_RANK_2026_R5: dict[str, float] = {
+PACE_RANK_2026_R3: dict[str, float] = {
     "Mercedes":     1.0,
     "Ferrari":      2.0,
     "McLaren":      3.0,   # Both cars finished R3 Japan; true pace emerging post-PU fix
@@ -95,8 +95,9 @@ PACE_RANK_2026_R5: dict[str, float] = {
     "Audi":         11.0,
 }
 
-# Legacy alias for code that still references the old name
-PACE_RANK_2026_EARLY = PACE_RANK_2026_R5
+# Legacy aliases for backward compatibility
+PACE_RANK_2026_R5    = PACE_RANK_2026_R3
+PACE_RANK_2026_EARLY = PACE_RANK_2026_R3
 
 
 class FeatureEngineering:

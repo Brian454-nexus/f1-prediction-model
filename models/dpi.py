@@ -198,12 +198,14 @@ CAR_LIMITED_CONTEXT: dict[str, str] = {
 PRIOR_RATINGS: dict[str, float] = {
     # ── Veterans — updated through R3 (Japan) ──────────────────────
     # Ratings reflect cumulative 2026 performance plus multi-year career Elo.
-    "Norris":      1800.0,   # P5 R1, DNS R2, P5 R3; career pace unquestioned
+    "Norris":      1800.0,   # P5 R1, DNS R2, P5 R3; career pace unquestioned; DNS car-attributed
     "Alonso":      1755.0,   # Aston Martin reliability issues; no Elo gain R1-R3
     "Leclerc":     1790.0,   # P3 R1, P4 R2, P3 R3 — consistently third-fastest
     "Hamilton":    1755.0,   # P4 R1, P3 R2, P6 R3 — 41pts, adapting to Ferrari well
     "Piastri":     1720.0,   # P2 R3 Japan shows true pace; DNS R1+R2 car-limited
-    "Verstappen":  1800.0,   # P6 R1, DNF R2 (PU), P8 R3 — car limited but racecraft intact
+    "Verstappen":  1800.0,   # P6 R1, DNF R2 (PU), P8 R3 — car limited; career Elo anchors
+                             # rating equal to Norris despite weaker 2026 results: both
+                             # suffered car issues and 2022-2025 career Elo is comparable.
     "Russell":     1665.0,   # Win R1 Australia; P2 R2, P4 R3 — 63pts, strong season
     "Sainz":       1710.0,   # Strong tyre management; Williams consistent points scorer
     "Hulkenberg":  1638.0,   # Audi car-limited; DNS R1 (Hulkenberg) then improving

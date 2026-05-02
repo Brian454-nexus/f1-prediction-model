@@ -63,7 +63,7 @@ PRIOR_PACE_ADVANTAGE_2025: dict[str, float] = {
 # 2026 posterior updates through Round 3 (Japan)
 # Expressed as signed delta vs field average in seconds/lap.
 # R1=Australia, R2=China, R3=Japan (Bahrain+Saudi Arabia cancelled)
-POSTERIOR_2026_R5: dict[str, float] = {
+POSTERIOR_2026_R3: dict[str, float] = {
     "Mercedes":     +1.15,  # Dominant 1-2 finishes R1 and R2; still leading in R3
     "Ferrari":      +0.15,  # Clear P3-P4 across all 3 races; consistent second-fastest team
     "McLaren":      +0.40,  # PU crisis in R1-R2; both cars finished R3 with true pace visible
@@ -77,8 +77,9 @@ POSTERIOR_2026_R5: dict[str, float] = {
     "Audi":         -0.60,  # Hulkenberg DNS R1; structural limitations persist
 }
 
-# Legacy alias kept for test compatibility
-POSTERIOR_2026_R2 = POSTERIOR_2026_R5
+# Legacy aliases kept for test and downstream compatibility
+POSTERIOR_2026_R5 = POSTERIOR_2026_R3
+POSTERIOR_2026_R2 = POSTERIOR_2026_R3
 
 # Weight factor: 2026 observation vs 2025 prior
 UPDATE_WEIGHT_2026 = 5.0
@@ -261,7 +262,7 @@ class ConstructorPerformanceModel:
     def _initialise_from_2026(self) -> dict:
         """Bootstrap state from known R1-R3 2026 results (through Japan)."""
         state = {}
-        for team, advantage in POSTERIOR_2026_R5.items():
+        for team, advantage in POSTERIOR_2026_R3.items():
             prior = PRIOR_PACE_ADVANTAGE_2025.get(team, -0.40)
 
             # All teams now have 3 races of 2026 data through R3
