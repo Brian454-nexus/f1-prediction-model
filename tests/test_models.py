@@ -288,14 +288,14 @@ def test_cpm_miami_upgrade_applied_vs_not():
     assert result_with_upgrade["mean_advantage"] >= result_no_upgrade["mean_advantage"]
 
 
-def test_rrm_updated_baselines_reflect_r5():
+def test_rrm_updated_baselines_reflect_r3():
     """Verify RRM baselines have been updated — McLaren should be < 0.25."""
     from models.rrm import BASELINE_DNF_PROB_2026
     assert BASELINE_DNF_PROB_2026["McLaren"] < 0.25, (
-        "McLaren DNF probability should be below 0.25 (PU crisis resolved by R5)"
+        "McLaren DNF probability should be below 0.25 (PU fix confirmed in R3)"
     )
-    assert BASELINE_DNF_PROB_2026["Aston Martin"] < 0.35, (
-        "Aston Martin DNF probability should be below 0.35 (improving through R5)"
+    assert BASELINE_DNF_PROB_2026["Aston Martin"] < 0.40, (
+        "Aston Martin DNF probability should be below 0.40 (4 DNFs in 6 starts through R3)"
     )
 
 

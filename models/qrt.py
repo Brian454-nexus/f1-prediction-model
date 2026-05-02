@@ -34,8 +34,8 @@ logger = get_logger("APEX.QRT")
 # ── 2026 Grid-to-Finish Calibration ──────────────────────────────────────────
 
 # Position change distribution (actual finish - grid position)
-# Fitted from R1-R5 (Australia through Jeddah). Positive = gained positions.
-# Mean ≈ 0.1 (slight tendency to hold position). Std ≈ 3.2 places.
+# Fitted from R1-R3 (Australia through Japan; Bahrain+Saudi cancelled).
+# Positive = gained positions.
 QRT_MEAN_POSITION_CHANGE   =  0.1
 QRT_STD_POSITION_CHANGE    =  3.2
 

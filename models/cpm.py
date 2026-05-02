@@ -23,7 +23,7 @@ OUTPUTS:
       field pace for a given constructor and circuit archetype.
     - confidence_interval: [p10, p90] credible interval.
 
-CURRENT STATE: Updated through Round 5 (Jeddah), with Miami break upgrades.
+CURRENT STATE: Updated through Round 3 (Japan), with Miami break upgrades.
 """
 
 from __future__ import annotations
@@ -60,21 +60,21 @@ PRIOR_PACE_ADVANTAGE_2025: dict[str, float] = {
     "Audi":         -0.60,  # New entrant — pessimistic prior
 }
 
-# 2026 posterior updates through Round 5 (Jeddah)
+# 2026 posterior updates through Round 3 (Japan)
 # Expressed as signed delta vs field average in seconds/lap.
-# R1=Australia, R2=China, R3=Suzuka, R4=Bahrain, R5=Jeddah
+# R1=Australia, R2=China, R3=Japan (Bahrain+Saudi Arabia cancelled)
 POSTERIOR_2026_R5: dict[str, float] = {
-    "Mercedes":     +1.15,  # Still dominant; slight narrowing as others develop
-    "Ferrari":      +0.15,  # Clear second-fastest across R3-R5; consistent P3-P4
-    "McLaren":      +0.45,  # PU crisis resolved by R4; true pace now visible
-    "Racing Bulls": -0.10,  # Lawson top-7 capable; improved aero correlation
-    "Haas":         -0.05,  # Bearman/Ocon consistently Q3/points scorers
-    "Alpine":       -0.18,  # Stable midfield; Gasly/Colapinto reliable points
-    "Williams":     -0.30,  # Albon extracting above-car pace
-    "Red Bull":     -0.40,  # Some upgrade benefit but fundamentally 9th-10th pace
-    "Cadillac":     -0.42,  # Perez/Bottas more comfortable as season progresses
-    "Aston Martin": -0.55,  # 2 finishes in R3-R5 but still poor race pace
-    "Audi":         -0.60,  # Structural limitations persist
+    "Mercedes":     +1.15,  # Dominant 1-2 finishes R1 and R2; still leading in R3
+    "Ferrari":      +0.15,  # Clear P3-P4 across all 3 races; consistent second-fastest team
+    "McLaren":      +0.40,  # PU crisis in R1-R2; both cars finished R3 with true pace visible
+    "Racing Bulls": -0.10,  # Lawson P7 R2, P9 R3; improved aero correlation
+    "Haas":         -0.05,  # Bearman P7 R1, P5 R2; DNF R3 but pace confirmed
+    "Alpine":       -0.18,  # Gasly P10/P6/P7 — stable midfield points scorer
+    "Williams":     -0.30,  # Sainz P9 R2; Albon extracting above-car pace
+    "Red Bull":     -0.42,  # Verstappen P6/DNF/P8; 3 races of poor race pace confirmed
+    "Cadillac":     -0.42,  # New entrant; settling in through first 3 races
+    "Aston Martin": -0.55,  # Alonso DNF×2, Stroll DNF×2 — zero points, structural issues
+    "Audi":         -0.60,  # Hulkenberg DNS R1; structural limitations persist
 }
 
 # Legacy alias kept for test compatibility
@@ -251,7 +251,7 @@ class ConstructorPerformanceModel:
                 logger.info(f"Loaded CPM state from {self.state_file}")
                 return json.load(f)
 
-        logger.info("Initialising CPM state from 2026 R1+R2 observations")
+        logger.info("Initialising CPM state from 2026 R1-R3 observations")
         return self._initialise_from_2026()
 
     def _save_state(self) -> None:
@@ -259,25 +259,31 @@ class ConstructorPerformanceModel:
             json.dump(self._state, f, indent=2)
 
     def _initialise_from_2026(self) -> dict:
-        """Bootstrap state from known R1-R5 2026 results (through Jeddah)."""
+        """Bootstrap state from known R1-R3 2026 results (through Japan)."""
         state = {}
         for team, advantage in POSTERIOR_2026_R5.items():
             prior = PRIOR_PACE_ADVANTAGE_2025.get(team, -0.40)
 
-            # All teams now have at least some 2026 data through R5
+            # All teams now have 3 races of 2026 data through R3
             mean = round(
                 (prior + UPDATE_WEIGHT_2026 * advantage) / (1 + UPDATE_WEIGHT_2026), 4
             )
-            # Tighter stddev now — 5 races of data significantly reduces uncertainty
-            stddev = 0.20
+            # Moderate uncertainty — 3 races of data; more than early-season but not yet settled.
+            # McLaren gets wider stddev: PU crisis in R1-R2 means only R3 shows true pace.
+            if team == "McLaren":
+                stddev = 0.28
+            elif team in ("Audi", "Cadillac"):
+                stddev = 0.26   # New entrants — less historical data
+            else:
+                stddev = 0.22
             confidence = "medium"
-            data_quality = "early" if team in ("Aston Martin",) else "reliable"
+            data_quality = "early" if team in ("Aston Martin", "Audi", "Cadillac") else "reliable"
 
             state[team] = {
                 "mean_advantage": mean,
                 "stddev": stddev,
                 "confidence": confidence,
-                "races_observed": 5,
+                "races_observed": 3,
                 "data_quality": data_quality,
             }
         return state

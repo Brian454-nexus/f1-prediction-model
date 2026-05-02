@@ -78,18 +78,19 @@ STANDINGS_2025_WCC: dict[str, float] = {
     "Sauber":       4.0,
 }
 
-# 2026 constructor race pace rank through R5 Jeddah (lower = quicker; 1 = fastest)
-# Updated from R1-R5 classified finishing performance and sector time analysis.
+# 2026 constructor race pace rank through R3 Japan (lower = quicker; 1 = fastest)
+# Updated from R1-R3 classified finishing performance and sector time analysis.
+# Bahrain and Saudi Arabia cancelled — season reduced to 22 races, 3 completed.
 PACE_RANK_2026_R5: dict[str, float] = {
     "Mercedes":     1.0,
     "Ferrari":      2.0,
-    "McLaren":      3.0,   # Reliability fixed R3-R4; true pace now showing
-    "Haas":         4.0,   # Consistently outperforming expectations
-    "Racing Bulls": 5.0,   # Lawson extracting strong results
-    "Alpine":       6.0,   # Stable midfield; Gasly/Colapinto points scorers
-    "Williams":     7.0,   # Albon above-car extraction
+    "McLaren":      3.0,   # Both cars finished R3 Japan; true pace emerging post-PU fix
+    "Haas":         4.0,   # Bearman P7 R1, P5 R2 — consistently above expectation
+    "Racing Bulls": 5.0,   # Lawson P7 R2, P9 R3 — extracting solid results
+    "Alpine":       6.0,   # Stable midfield; Gasly points every race
+    "Williams":     7.0,   # Albon/Sainz above-car extraction
     "Cadillac":     8.0,
-    "Red Bull":     9.0,   # Still 9th-10th pace despite upgrades
+    "Red Bull":     9.0,   # Verstappen P6/DNF/P8 — struggling despite upgrades
     "Aston Martin": 10.0,
     "Audi":         11.0,
 }
