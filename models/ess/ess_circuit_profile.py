@@ -74,6 +74,9 @@ CIRCUIT_PROFILES: dict[str, CircuitEnergyProfile] = {
     ),
     "Miami": CircuitEnergyProfile(
         "Miami", ehi=0.60, braking_score=0.55, corner_score=0.50, straight_penalty=0.40,
+        notes="Semi-permanent circuit. Heavy T1 + T11 braking zones deliver moderate regen. "
+              "Back straight (T10-T11) significant discharge. S2 technical complex aids harvest. "
+              "Net profile: balanced — above Jeddah, below Bahrain."
     ),
     "Imola": CircuitEnergyProfile(
         "Imola", ehi=0.55, braking_score=0.55, corner_score=0.50, straight_penalty=0.35,

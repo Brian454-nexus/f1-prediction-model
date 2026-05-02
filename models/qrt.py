@@ -34,7 +34,7 @@ logger = get_logger("APEX.QRT")
 # ── 2026 Grid-to-Finish Calibration ──────────────────────────────────────────
 
 # Position change distribution (actual finish - grid position)
-# Fitted from R1 (Australia) and R2 (China). Positive = gained positions.
+# Fitted from R1-R5 (Australia through Jeddah). Positive = gained positions.
 # Mean ≈ 0.1 (slight tendency to hold position). Std ≈ 3.2 places.
 QRT_MEAN_POSITION_CHANGE   =  0.1
 QRT_STD_POSITION_CHANGE    =  3.2
@@ -46,7 +46,8 @@ ENERGY_POSITIONS_PER_S     = 10.0
 # DPI modifier: each 100 points of DPI above average shifts expected finish by 1 place
 DPI_POSITIONS_PER_100      = 1.0
 
-TOTAL_DRIVERS = 20
+# 2026 grid: 11 constructors × 2 drivers = 22 total
+TOTAL_DRIVERS = 22
 
 
 class QualifyingRaceTranslator:

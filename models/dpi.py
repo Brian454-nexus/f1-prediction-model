@@ -21,7 +21,7 @@ DRIVER CLASSIFICATIONS (2026-correct):
         Racing Bulls car. R1 P8 and R2 P12 now anchor his prior.
 
     SOPHOMORE DRIVERS (2025 graduates, now Year 2):
-        Antonelli  — 2025 debut Mercedes. 2026: 2 races, 1 win, 1 P2, leads WCC.
+        Antonelli  — 2025 debut Mercedes. 2026: 5 races, 1 win, 4 podiums.
                      Treat as established. Remove CI inflation. High Elo prior.
         Hadjar     — 2025 rookie → promoted to Red Bull for 2026. Podium in debut year.
         Bearman    — 2025 debut Haas. 2026: P7 and P5. Remove CI inflation.
@@ -185,9 +185,12 @@ ROOKIES_2026: frozenset[str] = frozenset(
 # DPI calibration must NOT penalise Elo on mechanical DNF/DNS events.
 # The note is persisted in the JSON state and checked by AutoCalibrator.
 CAR_LIMITED_CONTEXT: dict[str, str] = {
-    "Norris":  "McLaren PU crisis: 3 failures in 4 car-race attempts. DPI reflects "
-               "driver quality; mechanical DNFs do not update Elo negatively.",
-    "Piastri": "McLaren PU crisis: 3 failures in 4 car-race attempts. Same note as Norris.",
+    "Norris":  "McLaren PU crisis: 3 failures in 4 car-race attempts R1-R2. "
+               "Honda fix deployed R3-R4; reliable through R5. DPI reflects "
+               "driver quality; early mechanical DNFs do not update Elo negatively.",
+    "Piastri": "McLaren PU crisis: 3 failures in 4 car-race attempts R1-R2. "
+               "Same reliability recovery as Norris by R4-R5. Elo protected for "
+               "pre-fix DNFs.",
     "Alonso":  "Aston Martin structural underperformance: 0 race finishes in R1+R2 "
                "across both cars. All DNFs confirmed mechanical. Elo protected.",
     "Stroll":  "Aston Martin structural underperformance: same car as Alonso. "
