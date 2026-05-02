@@ -172,9 +172,9 @@ def task_run_ess(circuit_name: str, total_laps: int) -> dict:
     mdp     = EnergyDeploymentMDP()
     mc      = EnergyMonteCarlo(n_simulations=MC_RUNS)
 
-    # ERS deployment efficiency updated through R5 (Jeddah).
-    # McLaren reliability fix confirmed — full ERS efficiency now available.
-    # Red Bull still lagging on ERS correlation despite mechanical upgrades.
+    # ERS deployment efficiency updated through R3 (Japan).
+    # McLaren PU fix confirmed in R3 — both cars finished; ERS now fully operational.
+    # Red Bull still lagging on ERS correlation despite hardware revisions.
     team_efficiencies = {
         "Mercedes":     1.15,   # Best ERS deployment in field; 5/5 clean races
         "Ferrari":      1.07,   # Improved R3-R5; better thermal management
@@ -232,7 +232,7 @@ def task_build_driver_inputs(
     }
 
     # 2026 Miami GP entry list with expected qualifying positions.
-    # Based on season form through R5 + Miami historical trends (power-unit dominant).
+    # Based on season form through R3 (Japan) + Miami historical trends (power-unit dominant).
     # IMPORTANT: Live Qualifying data replaces these positions when FastF1 Q data
     # is available post-session. These are pre-qualifying model priors only.
     entry_list = [

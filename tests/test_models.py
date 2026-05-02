@@ -227,7 +227,7 @@ def test_meta_ensemble_win_probs_sum_to_one():
         {"driver": f"Driver{i}", "team": "Mercedes", "grid_pos": i,
          "cpm_score": 0.5, "dpi_score": 1600, "ess_gain": 5.0,
          "rrm_dnf": 0.05, "cdc_mod": 0.0}
-        for i in range(1, 21)
+        for i in range(1, 23)  # 22 drivers — full 2026 grid (11 teams × 2)
     ]
     results = ensemble.predict_race(driver_inputs, "Suzuka", 3)
     total_win = sum(r.win_probability for r in results)
@@ -241,11 +241,11 @@ def test_meta_ensemble_positions_in_range():
         {"driver": f"Driver{i}", "team": "Ferrari", "grid_pos": i,
          "cpm_score": 0.0, "dpi_score": 1500, "ess_gain": 0.0,
          "rrm_dnf": 0.05, "cdc_mod": 0.0}
-        for i in range(1, 21)
+        for i in range(1, 23)  # 22 drivers — full 2026 grid (11 teams × 2)
     ]
     results = ensemble.predict_race(driver_inputs, "Suzuka", 3)
     for r in results:
-        assert 1.0 <= r.predicted_position <= 20.0
+        assert 1.0 <= r.predicted_position <= 22.0
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -288,14 +288,14 @@ def test_cpm_miami_upgrade_applied_vs_not():
     assert result_with_upgrade["mean_advantage"] >= result_no_upgrade["mean_advantage"]
 
 
-def test_rrm_updated_baselines_reflect_r5():
+def test_rrm_updated_baselines_reflect_r3():
     """Verify RRM baselines have been updated — McLaren should be < 0.25."""
     from models.rrm import BASELINE_DNF_PROB_2026
     assert BASELINE_DNF_PROB_2026["McLaren"] < 0.25, (
-        "McLaren DNF probability should be below 0.25 (PU crisis resolved by R5)"
+        "McLaren DNF probability should be below 0.25 (PU fix confirmed in R3)"
     )
-    assert BASELINE_DNF_PROB_2026["Aston Martin"] < 0.35, (
-        "Aston Martin DNF probability should be below 0.35 (improving through R5)"
+    assert BASELINE_DNF_PROB_2026["Aston Martin"] < 0.40, (
+        "Aston Martin DNF probability should be below 0.40 (4 DNFs in 6 starts through R3)"
     )
 
 

@@ -90,7 +90,8 @@ class WetWeatherModel:
     adjustments before generating the final probability distribution.
     """
 
-    TOTAL_DRIVERS = 20
+    # 2026 grid: 11 constructors × 2 drivers = 22 total
+    TOTAL_DRIVERS = 22
 
     def __init__(self) -> None:
         self.weights = WET_ENSEMBLE_WEIGHTS
@@ -157,11 +158,12 @@ class WetWeatherModel:
         )
 
         # Map score to expected finish position (higher score → lower position number)
-        # Scale: score ≈ [-2, 2] mapped to positions [1, 20]
-        raw_finish = 10.5 - raw_score * 4.5
-        expected_finish = max(1.0, min(20.0, raw_finish))
+        # Scale: score ≈ [-2, 2] mapped to positions [1, 22]
+        # Midpoint of 1-22 grid = 11.5; half-range = 10.5; scale = 10.5/2 = 5.25
+        raw_finish = 11.5 - raw_score * 5.25
+        expected_finish = max(1.0, min(float(self.TOTAL_DRIVERS), raw_finish))
 
-        finish_probs = self._position_distribution(expected_finish, std=4.5)
+        finish_probs = self._position_distribution(expected_finish, std=4.5, n_drivers=self.TOTAL_DRIVERS)
         p_finish = 1 - wet_dnf_prob
         finish_probs = {pos: prob * p_finish for pos, prob in finish_probs.items()}
 
@@ -178,9 +180,9 @@ class WetWeatherModel:
         )
 
     @staticmethod
-    def _position_distribution(mean: float, std: float) -> dict[int, float]:
-        """Discretised Normal over positions 1-20."""
-        raw = {p: np.exp(-0.5 * ((p - mean) / std) ** 2) for p in range(1, 21)}
+    def _position_distribution(mean: float, std: float, n_drivers: int = 22) -> dict[int, float]:
+        """Discretised Normal over positions 1-n_drivers (default: 22 for the 2026 grid)."""
+        raw = {p: np.exp(-0.5 * ((p - mean) / std) ** 2) for p in range(1, n_drivers + 1)}
         total = sum(raw.values())
         return {pos: round(v / total, 6) for pos, v in raw.items()}
 

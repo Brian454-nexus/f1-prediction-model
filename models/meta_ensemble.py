@@ -52,7 +52,8 @@ DEFAULT_WEIGHTS = {
     "QRT": 0.05,
 }
 
-TOTAL_DRIVERS = 20
+# 2026 grid: 11 constructors × 2 drivers = 22 total
+TOTAL_DRIVERS = 22
 MC_RUNS = 50_000
 
 
